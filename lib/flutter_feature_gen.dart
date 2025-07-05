@@ -122,7 +122,7 @@ class FeatureGenerator {
         name: featureName,
         stateMgmt: options.stateMgmt ?? '',
         useFreezed: options.useFreezed,
-        providerName: providerName
+        providerName: providerName,
       ).generate();
     }
   }

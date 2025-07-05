@@ -16,7 +16,7 @@ class TestGenerator {
     required this.className,
     required this.stateMgmt,
     required this.useFreezed,
-    required this.providerName
+    required this.providerName,
   }) {
     _templateGenerator = TestTemplateGenerator(
       className: className,
