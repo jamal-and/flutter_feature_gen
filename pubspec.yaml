@@ -1,6 +1,6 @@
 name: flutter_feature_gen
 description: A Dart CLI tool to generate clean architecture Flutter features.
-version: 1.0.4
+version: 1.0.5
 repository: https://github.com/jamal-and/flutter_feature_gen
 
 environment:
@@ -16,6 +16,7 @@ dev_dependencies:
   
 executables:
   flutter_feature_gen: main
+  featgen: main
 
 example: example/main.dart
 

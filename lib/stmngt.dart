@@ -3,12 +3,14 @@ import 'dart:io';
 class StateManagementGenerator {
   final String name;
   final String className;
+  final String providerName;
   final String? stateMgmt;
   final bool useFreezed;
 
   StateManagementGenerator({
     required this.name,
     required this.className,
+    required this.providerName,
     required this.stateMgmt,
     required this.useFreezed,
   });
@@ -65,7 +67,7 @@ class ${className}Controller extends Notifier<${className}State> {
   }
 }
 
-final ${name}ControllerProvider = NotifierProvider<${className}Controller, ${className}State>(
+final ${providerName}ControllerProvider = NotifierProvider<${className}Controller, ${className}State>(
   () => ${className}Controller(),
 );
 ''');
@@ -131,7 +133,7 @@ class ${className}Controller extends Notifier<${className}State> {
   }
 }
 
-final ${name}ControllerProvider = NotifierProvider<${className}Controller, ${className}State>(
+final ${providerName}ControllerProvider = NotifierProvider<${className}Controller, ${className}State>(
   () => ${className}Controller(),
 );
 ''');

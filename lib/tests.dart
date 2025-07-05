@@ -9,17 +9,20 @@ class TestGenerator {
   final String stateMgmt;
   final bool useFreezed;
   late final TestTemplateGenerator _templateGenerator;
+  final String providerName;
 
   TestGenerator({
     required this.name,
     required this.className,
     required this.stateMgmt,
     required this.useFreezed,
+    required this.providerName
   }) {
     _templateGenerator = TestTemplateGenerator(
       className: className,
       featureName: name,
       useFreezed: useFreezed,
+      providerName: providerName,
     );
   }
 
@@ -47,7 +50,7 @@ class TestGenerator {
       case 'riverpod':
         writeTest(
           '$name/presentation/controller/${name}_controller_test.dart',
-          riverpodTestTemplate(name, className),
+          riverpodTestTemplate(name, className, providerName),
         );
         break;
       case 'bloc':
