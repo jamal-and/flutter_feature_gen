@@ -21,7 +21,10 @@ void main() {
     expect(toSnakeCase('app_name'), 'app_name'); // already snake_case
     expect(toSnakeCase('app-Name'), 'app_name');
     expect(toSnakeCase('APP NAME'), 'app_name');
-    expect(toSnakeCase('appName'), 'appname'); // camelCase is not processed as a snake_case
+    expect(
+      toSnakeCase('appName'),
+      'appname',
+    ); // camelCase is not processed as a snake_case
     expect(toSnakeCase('App123 Name456'), 'app123_name456');
     expect(toSnakeCase('   App Name   '), 'app_name');
     expect(toSnakeCase('--App--Name--'), 'app_name');

@@ -67,27 +67,24 @@ class PackageManager {
       dependencies: ['flutter_riverpod'],
       devDependencies: [],
     ),
-    'bloc': PackageInfo(
-      dependencies: ['flutter_bloc'],
-      devDependencies: [],
-    ),
+    'bloc': PackageInfo(dependencies: ['flutter_bloc'], devDependencies: []),
     'cubit': PackageInfo(
       dependencies: ['flutter_bloc'], // Cubit is part of flutter_bloc
       devDependencies: [],
     ),
     'freezed': PackageInfo(
-      dependencies: ['freezed_annotation','json_annotation'],
-      devDependencies: ['freezed', 'build_runner','json_serializable'],
+      dependencies: ['freezed_annotation', 'json_annotation'],
+      devDependencies: ['freezed', 'build_runner', 'json_serializable'],
     ),
     'test': PackageInfo(
       dependencies: [],
-      devDependencies: ['mocktail', 'build_runner',],
+      devDependencies: ['mocktail', 'build_runner'],
     ),
   };
 
   static Future<void> ensurePackages(FeatureOptions options) async {
     print('🔍 Checking required packages...');
-    
+
     final pubspecFile = File('pubspec.yaml');
     if (!pubspecFile.existsSync()) {
       _exitWithError('pubspec.yaml not found. Are you in a Flutter project?');
@@ -95,7 +92,7 @@ class PackageManager {
 
     final requiredPackages = _getRequiredPackages(options);
     final pubspecContent = await pubspecFile.readAsString();
-    
+
     if (_arePackagesPresent(pubspecContent, requiredPackages)) {
       print('✅ All required packages are already present');
       return;
@@ -103,10 +100,10 @@ class PackageManager {
 
     print('📦 Adding missing packages...');
     await _addPackages(requiredPackages);
-    
+
     print('🔄 Running flutter pub get...');
     await _runPubGet();
-    
+
     print('✅ Packages installed successfully');
   }
 
@@ -118,7 +115,7 @@ class PackageManager {
     if (options.stateMgmt != null) {
       final statePackage = _packages[options.stateMgmt!]!;
       deps.addAll(statePackage.dependencies);
-      if(options.stateMgmt == 'bloc' && options.generateTests) {
+      if (options.stateMgmt == 'bloc' && options.generateTests) {
         // Add bloc_test only for bloc state management
         devDeps.add('bloc_test');
       }
@@ -145,7 +142,10 @@ class PackageManager {
     );
   }
 
-  static bool _arePackagesPresent(String pubspecContent, PackageRequirements required) {
+  static bool _arePackagesPresent(
+    String pubspecContent,
+    PackageRequirements required,
+  ) {
     // Simple check - in a real implementation, you'd want to parse YAML properly
     for (final dep in required.dependencies) {
       if (!pubspecContent.contains('$dep:')) return false;
@@ -164,13 +164,18 @@ class PackageManager {
     }
 
     if (packages.devDependencies.isNotEmpty) {
-      commands.add('flutter pub add dev:${packages.devDependencies.join(' dev:')}');
+      commands.add(
+        'flutter pub add dev:${packages.devDependencies.join(' dev:')}',
+      );
     }
 
     for (final command in commands) {
       print('Running: $command');
-      final result = await Process.run('flutter', command.split(' ').skip(1).toList());
-      
+      final result = await Process.run(
+        'flutter',
+        command.split(' ').skip(1).toList(),
+      );
+
       if (result.exitCode != 0) {
         _exitWithError('Failed to add packages: ${result.stderr}');
       }
@@ -179,7 +184,7 @@ class PackageManager {
 
   static Future<void> _runPubGet() async {
     final result = await Process.run('flutter', ['pub', 'get']);
-    
+
     if (result.exitCode != 0) {
       _exitWithError('Failed to run pub get: ${result.stderr}');
     }
@@ -205,4 +210,3 @@ class PackageRequirements {
     required this.devDependencies,
   });
 }
-

@@ -3,7 +3,6 @@
 import 'dart:io';
 
 void main() async {
-
   // Equivalent to: `dart run ../lib/flutter_feature_gen.dart meal-plan`
   //
   // ✅ In a real project, use: `flutter_feature_gen <feature_name> [state_management] [options]`
