@@ -5,6 +5,7 @@ import 'package:flutter_feature_gen/stmngt.dart';
 import 'package:flutter_feature_gen/tests.dart';
 import 'package:flutter_feature_gen/utils/io_helper.dart';
 import 'package:flutter_feature_gen/utils/source_template.dart';
+import 'package:flutter_feature_gen/utils/string_utils.dart';
 
 /// Entry point of the CLI tool.
 /// Accepts a single argument: the feature name.
@@ -22,12 +23,14 @@ class FeatureGenerator {
   final FeatureOptions options;
   late final String featureName;
   late final String className;
+  late final String providerName;
   late final String basePath;
 
   final bool _log = false;
   FeatureGenerator(this.options) {
-    featureName = _toSnakeCase(options.featureName!);
-    className = _toPascalCase(featureName);
+    featureName = toSnakeCase(options.featureName!);
+    className = toPascalCase(featureName);
+    providerName = toCamelCase(featureName);
     basePath = 'lib/features/$featureName';
   }
 
@@ -104,6 +107,7 @@ class FeatureGenerator {
       StateManagementGenerator(
         name: featureName,
         className: className,
+        providerName: providerName,
         stateMgmt: options.stateMgmt,
         useFreezed: options.useFreezed,
       ).generate();
@@ -128,29 +132,4 @@ class FeatureGenerator {
   }
 
   // Template methods are now handled by SourceTemplate class
-}
-
-/// String utility functions
-extension StringUtils on String {
-  /// Converts input like "meal-plan" or "meal plan" into snake_case.
-  String toSnakeCase() {
-    return trim().toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
-  }
-
-  /// Converts snake_case into PascalCase (e.g., "meal_plan" → "MealPlan").
-  String toPascalCase() {
-    return split(
-      '_',
-    ).map((part) => part[0].toUpperCase() + part.substring(1)).join();
-  }
-}
-
-/// Converts input like "meal-plan" or "meal plan" into snake_case.
-String _toSnakeCase(String input) {
-  return input.toSnakeCase();
-}
-
-/// Converts snake_case into PascalCase (e.g., "meal_plan" → "MealPlan").
-String _toPascalCase(String input) {
-  return input.toPascalCase();
 }
