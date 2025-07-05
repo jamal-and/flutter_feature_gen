@@ -427,7 +427,11 @@ void main() {
 }
 ''';
 
-String riverpodTestTemplate(String name, String className) =>
+String riverpodTestTemplate(
+  String name,
+  String className,
+  String providerName,
+) =>
     '''
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -446,12 +450,12 @@ void main() {
     });
 
     test('should have initial state', () {
-      final controller = container.read(${name}ControllerProvider.notifier);
+      final controller = container.read(${providerName}ControllerProvider.notifier);
       expect(controller.state, const ${className}State(isLoading: false));
     });
 
     test('should update state after fetchData', () async {
-      final controller = container.read(${name}ControllerProvider.notifier);
+      final controller = container.read(${providerName}ControllerProvider.notifier);
 
       await controller.fetchData();
 
@@ -652,10 +656,12 @@ class TestTemplateGenerator {
   final String className;
   final String featureName;
   final bool useFreezed;
+  final String providerName;
 
   TestTemplateGenerator({
     required this.className,
     required this.featureName,
+    required this.providerName,
     this.useFreezed = false,
   });
 
@@ -694,7 +700,7 @@ class TestTemplateGenerator {
   String getControllerTestTemplate(String stateMgmt) {
     switch (stateMgmt) {
       case 'riverpod':
-        return riverpodTestTemplate(featureName, className);
+        return riverpodTestTemplate(featureName, className, providerName);
       case 'bloc':
         return useFreezed
             ? blocFreezedTestTemplate(featureName, className)
